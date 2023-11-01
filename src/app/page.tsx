@@ -1,9 +1,7 @@
-import Link from "next/link";
-
 import { CreatePost } from "~/app/_components/create-post";
-import { api } from "~/trpc/server";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { PostList } from "./_components/get-posts";
 
 export default async function Home() {
   return (
@@ -17,39 +15,9 @@ export default async function Home() {
           {/* Signed out users get sign in button */}
           <SignInButton />
         </SignedOut>
-        <GetAllPost />
-        {/* <CrudShowcase /> */}
+        <PostList />
+        <CreatePost />
       </div>
     </main>
-  );
-}
-
-async function GetAllPost() {
-  const allPost = await api.post.getAll.query();
-  console.log(allPost);
-  return (
-    <div className="w-full max-w-xs">
-      {allPost ? (
-        allPost?.map((post) => <div key={post.id}>{post.content}</div>)
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-    </div>
-  );
-}
-
-async function CrudShowcase() {
-  const latestPost = await api.post.getLatest.query();
-
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.id}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
-    </div>
   );
 }
