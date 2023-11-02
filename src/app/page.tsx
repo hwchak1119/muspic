@@ -1,7 +1,7 @@
-import { CreatePost } from "~/app/_components/create-post";
+import { CreatePost } from "~/app/_components/posts/create-post";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { PostList } from "./_components/get-posts";
+import { PostList } from "./_components/posts/get-posts";
 
 export default async function Home() {
   return (

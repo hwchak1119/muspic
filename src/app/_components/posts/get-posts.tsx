@@ -2,6 +2,7 @@
 
 import { api } from "~/trpc/react";
 import { RouterOutputs } from "~/trpc/shared";
+import { Spinner } from "../Spinner";
 
 type PostWithUser = RouterOutputs["post"]["getAll"][number];
 
@@ -17,7 +18,7 @@ const PostView = ({ post, author }: PostWithUser) => {
 export function PostList() {
   const { data, isLoading } = api.post.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Spinner />;
 
   if (!data) return <div>You have no posts yet.</div>;
 
