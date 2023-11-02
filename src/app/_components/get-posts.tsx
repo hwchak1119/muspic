@@ -1,6 +1,18 @@
 "use client";
-// import { api } from "~/trpc/server";
+
 import { api } from "~/trpc/react";
+import { RouterOutputs } from "~/trpc/shared";
+
+type PostWithUser = RouterOutputs["post"]["getAll"][number];
+
+const PostView = ({ post, author }: PostWithUser) => {
+  return (
+    <div>
+      <h4>{author.username}</h4>
+      <div>{post.content}</div>
+    </div>
+  );
+};
 
 export function PostList() {
   const { data, isLoading } = api.post.getAll.useQuery();
@@ -11,7 +23,9 @@ export function PostList() {
 
   return (
     <div className="w-full max-w-xs">
-      {data?.map(({ post, author }) => <div key={post.id}>{post.content}</div>)}
+      {data?.map((fullPost) => (
+        <PostView key={fullPost.post.id} {...fullPost} />
+      ))}
     </div>
   );
 }
