@@ -1,26 +1,28 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
 
 export function CreatePost() {
-  const router = useRouter();
   const [input, setInput] = useState<string>("");
+  const getPosts = api.post.getAll.useQuery();
 
-  const createPost = api.post.create.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      setInput("");
-    },
-  });
+  const { mutate: createPost, isLoading: isPosting } =
+    api.post.create.useMutation({
+      onSuccess: () => {
+        setInput("");
+      },
+      onSettled: () => {
+        getPosts.refetch();
+      },
+    });
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ content: input });
+        createPost({ content: input });
       }}
       className="flex flex-col gap-2"
     >
@@ -34,9 +36,9 @@ export function CreatePost() {
       <button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
+        disabled={isPosting}
       >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
+        {isPosting ? "Submitting..." : "Submit"}
       </button>
     </form>
   );
