@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { api } from "~/trpc/react";
 
 export function CreatePost() {
   const [input, setInput] = useState<string>("");
-  const getPosts = api.post.getAll.useQuery();
   const ctx = api.useContext();
 
   const { mutate: createPost, isLoading: isPosting } =
@@ -14,6 +14,14 @@ export function CreatePost() {
       onSuccess: () => {
         setInput("");
         ctx.post.getAll.invalidate();
+      },
+      onError: (e) => {
+        const errorMessage = e.data?.zodError?.fieldErrors.content;
+        if (errorMessage && errorMessage[0]) {
+          toast.error(errorMessage[0]);
+        } else {
+          toast.error("Failed to post!");
+        }
       },
     });
 
