@@ -7,14 +7,13 @@ import { api } from "~/trpc/react";
 export function CreatePost() {
   const [input, setInput] = useState<string>("");
   const getPosts = api.post.getAll.useQuery();
+  const ctx = api.useContext();
 
   const { mutate: createPost, isLoading: isPosting } =
     api.post.create.useMutation({
       onSuccess: () => {
         setInput("");
-      },
-      onSettled: () => {
-        getPosts.refetch();
+        ctx.post.getAll.invalidate();
       },
     });
 
