@@ -3,14 +3,19 @@
 import { api } from "~/trpc/react";
 import { RouterOutputs } from "~/trpc/shared";
 import { Spinner } from "../Spinner";
+import Link from "next/link";
 
 type PostWithUser = RouterOutputs["post"]["getAll"][number];
 
 const PostView = ({ post, author }: PostWithUser) => {
   return (
     <div>
-      <h4>{author.username}</h4>
-      <div>{post.content}</div>
+      <Link href={`/@${author.username}`}>
+        <h4>{author.username}</h4>
+      </Link>
+      <Link href={`/post/${post.id}`}>
+        <div>{post.content}</div>
+      </Link>
     </div>
   );
 };
