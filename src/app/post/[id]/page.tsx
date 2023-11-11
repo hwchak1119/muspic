@@ -1,4 +1,9 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Post",
+};
 
 export default function SinglePostPage() {
   return (

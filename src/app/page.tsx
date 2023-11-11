@@ -2,6 +2,11 @@ import { CreatePost } from "~/app/_components/posts/create-post";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { PostList } from "./_components/posts/get-posts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 export default async function Home() {
   return (
