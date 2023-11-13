@@ -1,8 +1,5 @@
-"use client";
-
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 import { RouterOutputs } from "~/trpc/shared";
-import { Spinner } from "../Spinner";
 import Link from "next/link";
 
 type PostWithUser = RouterOutputs["post"]["getAll"][number];
@@ -20,16 +17,14 @@ const PostView = ({ post, author }: PostWithUser) => {
   );
 };
 
-export function PostList() {
-  const { data, isLoading } = api.post.getAll.useQuery();
+export async function PostList() {
+  const postList = await api.post.getAll.query();
 
-  if (isLoading) return <Spinner />;
-
-  if (!data) return <div>You have no posts yet.</div>;
+  if (!postList) return <div>You have no posts yet.</div>;
 
   return (
     <div className="w-full max-w-xs">
-      {data?.map((fullPost) => (
+      {postList?.map((fullPost) => (
         <PostView key={fullPost.post.id} {...fullPost} />
       ))}
     </div>

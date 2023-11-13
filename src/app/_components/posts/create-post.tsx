@@ -2,18 +2,20 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/react";
 
 export function CreatePost() {
   const [input, setInput] = useState<string>("");
-  const ctx = api.useContext();
+
+  const router = useRouter();
 
   const { mutate: createPost, isLoading: isPosting } =
     api.post.create.useMutation({
       onSuccess: () => {
         setInput("");
-        ctx.post.getAll.invalidate();
+        router.refresh();
       },
       onError: (e) => {
         const errorMessage = e.data?.zodError?.fieldErrors.content;
