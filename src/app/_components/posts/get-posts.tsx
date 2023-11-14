@@ -1,5 +1,5 @@
 import { api } from "~/trpc/server";
-import { RouterOutputs } from "~/trpc/shared";
+import type { RouterOutputs } from "~/trpc/shared";
 import Link from "next/link";
 
 type PostWithUser = RouterOutputs["post"]["getAll"][number];
